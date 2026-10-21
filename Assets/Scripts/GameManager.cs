@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum CellState { Empty, X, O }
@@ -5,6 +6,10 @@ public enum CellState { Empty, X, O }
 public class GameManager : MonoBehaviour
 {
     // Tablero de 3x3 celdas
+
+    [SerializeField] private Transform cellsContainer;
+    [SerializeField] private GameObject cellPrefab;
+
     public  CellState[,] Board { get; private set; } = new CellState[3, 3];
     public  CellState CurrentTurn { get; private set; } = CellState.X;
     public  bool IsGameOver { get; private set; }
@@ -25,7 +30,25 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
+    private void Start()
+    {
+        ResetImages();
+    }
+
+    private void ResetImages()
+    {
+        if (cellsContainer && cellPrefab)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                GameObject cell = Instantiate(cellPrefab, cellsContainer);
+                BoardCell boardCell = cell.GetComponent<BoardCell>();
+                boardCell.row = i / 3;
+                boardCell.col = i % 3;
+            }
+        }
+    }
     // Intenta realizar una jugada en la posición (row, col)
     public  bool PlayMove(int row, int col)
     {

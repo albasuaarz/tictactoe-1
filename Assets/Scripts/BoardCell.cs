@@ -1,15 +1,26 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoardCell : MonoBehaviour
 {
-    [SerializeField] private int row;
-    [SerializeField] private int col;
+    [SerializeField] public int row;
+    [SerializeField] public int col;
 
-    [SerializeField] private TextMeshProUGUI cellText;
-    
+    [SerializeField] private Sprite imageX;
+    [SerializeField] private Sprite imageO;
+    private Image spriteRenderer;
+    private Sprite _spriteDefault;
+
+    //[SerializeField] private TextMeshProUGUI cellText;
+
     //[SerializeField] private UIManager uiManager;
-    
+
+    private void Awake() { 
+        spriteRenderer = GetComponent<Image>();
+        _spriteDefault = spriteRenderer.sprite;
+    }
+
     // respuesta al onClick
     public void OnClick()
     {
@@ -27,7 +38,19 @@ public class BoardCell : MonoBehaviour
     public void Refresh()
     {
         CellState state = GameManager.Instance.Board[row, col];
-        cellText.text = (state == CellState.Empty) ? "" : state.ToString();
+        if (state == CellState.X)
+        {
+            spriteRenderer.sprite = imageX;
+        }
+        else if (state == CellState.O)
+        {
+            spriteRenderer.sprite = imageO;
+        }
+        else {
+            spriteRenderer.sprite = _spriteDefault;
+        }
+
+        //cellText.text = (state == CellState.Empty) ? "" : state.ToString();
     }
 
     private void Update()
