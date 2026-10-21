@@ -4,7 +4,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     
-    [SerializeField] private BoardCell[] boardsCell;
+    //[SerializeField] private BoardCell[] boardsCell;
 
     [SerializeField] private TextMeshProUGUI statusText;
     
@@ -23,36 +23,33 @@ public class UIManager : MonoBehaviour
     private void Reset()
     {
         // Limpia el Tablero (modelo)
-        GameManager.StartNewGame();
+        GameManager.Instance.StartNewGame();
         // Actualiza la interface de usuario
-        UpdateUI();
+        Update();
     }
 
-    public void UpdateUI()
+    public void Update()
     {
         // Actualiza el símbolo de cada celda en pantalla
-        foreach (BoardCell boardCell in boardsCell)
-        {
-            boardCell.Refresh();
-        }
-        
-        // Actualiza el texto de estado
-        if (GameManager.IsGameOver)
-        {
-            // poner ganador o empate
-            if (GameManager.Winner == CellState.Empty)
+        //foreach (BoardCell boardCell in boardsCell){boardCell.Refresh();}
+
+            // Actualiza el texto de estado
+            if (GameManager.Instance.IsGameOver)
             {
-                statusText.text = "¡ Empate !";
+            // poner ganador o empate
+                if (GameManager.Instance.Winner == CellState.Empty)
+                {
+                    statusText.text = "¡ Empate !";
+                }
+                else
+                {
+                    statusText.text = $"¡ Ganador: {GameManager.Instance.Winner} !";
+                }
             }
             else
             {
-                statusText.text = $"¡ Ganador: {GameManager.Winner} !";
+                // informar del turno actual
+                statusText.text = $"Turno actual: {GameManager.Instance.CurrentTurn}";
             }
-        }
-        else
-        {
-            // informar del turno actual
-            statusText.text = $"Turno actual: {GameManager.CurrentTurn}";
-        }
     }
 }
